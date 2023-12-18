@@ -1,11 +1,11 @@
-const { SerialPort } = require('serialport');
-const { ReadlineParser } = require('@serialport/parser-readline');
-const express = require('express')
-const http = require('http')
-const cors = require('cors')
-const bodyParser = require('body-parser');
-const excelJS = require('exceljs')
-var contentDisposition = require('content-disposition')
+import { SerialPort } from 'serialport';
+import { ReadlineParser } from '@serialport/parser-readline';
+import http from 'http';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import excelJS from 'exceljs';
+import * as contentDisposition from 'content-disposition';
+import express, { Request, Response } from 'express'
 
 const app = express();
 const server = http.createServer(app);
@@ -15,7 +15,7 @@ app.use(express.static('public'));
 app.use(cors())
 
 
-app.get('/api/getstream/:path', async (req, res) => {
+app.get('/api/getstream/:path', async (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
@@ -79,10 +79,14 @@ app.post('/api/savedata', async (req, res) => {
         { header: "Latitude", key: "lat", width: 25 },
         { header: "Longitude", key: "long", width: 10 },
     ];
-    req.body.forEach(data => { worksheet.addRow(data); });
+    req.body.forEach((data: any) => { worksheet.addRow(data); });
 
+    const dispositionObject = contentDisposition.parse("attachment; filename=data.xlsx");
+
+    const dispositionHeader = `attachment; filename="${dispositionObject.parameters.filename}"`
+
+    res.setHeader("Content-Disposition", dispositionHeader);
     res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); 
-    res.setHeader("Content-Disposition", contentDisposition.parse("attachment; filename=" + `data.xlsx`));
 
     workbook.xlsx.write(res).then(() => res.end());
 

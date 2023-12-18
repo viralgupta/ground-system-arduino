@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
 
-const Chart = ({ name, data }) => {
+type props = {
+    name: string;
+    data: { uv: number;}[]
+}
+
+const Chart = ({ name, data }: props) => {
     const [chartData, setChartData] = useState(data);
 
     useEffect(() => {

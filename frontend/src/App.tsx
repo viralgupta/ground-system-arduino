@@ -21,7 +21,7 @@ function App() {
     }
   ])
 
-  function mapValueToRange(value, oldMin, oldMax, newMin, newMax) {
+  function mapValueToRange(value: number, oldMin: number, oldMax: number, newMin: number, newMax: number) {
     const oldValueRange = oldMax - oldMin;
     const newValueRange = newMax - newMin;
 
@@ -34,8 +34,8 @@ function App() {
 
   const getPorts = async () => {
     const res = await fetch("http://localhost:5000/api/ports", { method: "GET" });
-    const response = await res.json()
-    const selectElement = document.getElementById('ports');
+    const response: {ports: string[]} = await res.json()
+    const selectElement = document.getElementById('ports') as HTMLSelectElement;
     const doption = document.createElement('option');
     doption.defaultSelected = true;
     doption.text = "Select Port";
@@ -48,9 +48,9 @@ function App() {
     });
   }
 
-  let eventSource
+  let eventSource: EventSource;
 
-  const getDataStream = async (port) => {
+  const getDataStream = async (port: string) => {
     eventSource = new EventSource(`http://localhost:5000/api/getstream/${port}`);
     eventSource.onmessage = function (event) {
       setCanexport(false)
@@ -107,7 +107,7 @@ function App() {
     const a = document.createElement("a");
     a.href = url;
     const currentDate = new Date();
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
         year: '2-digit',
         month: '2-digit',
         day: '2-digit',
@@ -127,7 +127,7 @@ function App() {
   
 
   useEffect(() => {
-    const selectElement = document.getElementById('ports');
+    const selectElement = document.getElementById('ports') as HTMLSelectElement;
     selectElement.addEventListener('focus', function () {
       selectElement.innerHTML = ''
       getPorts()
@@ -149,7 +149,7 @@ function App() {
           {connected && <div className={`px-5 text-green-600`}>Connected&nbsp;●</div>}
           {!connected && <div className={`px-5 text-red-600`}>Waiting&nbsp;for&nbsp;data...</div>}
           <select id="ports" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option defaultValue>Select Port</option>
+          <option value="">Select Port</option>
           </select>
           <button onClick={exportData} disabled={!canexport} className='bg-green-600 text-base p-2 rounded-md mx-2 disabled:cursor-not-allowed disabled:bg-green-200 cursor-pointer'>Export</button>
         </div>
