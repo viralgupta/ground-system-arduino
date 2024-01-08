@@ -68,16 +68,19 @@ app.post('/api/savedata', async (req, res) => {
     const workbook = new excelJS.Workbook();
     const worksheet = workbook.addWorksheet("data");
     worksheet.columns = [
-        { header: "Time", key: "time", width: 15 },
+        { header: "Time", key: "time", width: 25 },
         { header: "Altitude", key: "alt", width: 15 },
-        { header: "Accelerometer-X", key: "accx", width: 15 },
-        { header: "Accelerometer-Y", key: "accy", width: 15 },
-        { header: "Accelerometer-Z", key: "accz", width: 15 },
-        { header: "Gyroscope-X", key: "gyrox", width: 15 },
-        { header: "Gyroscope-Y", key: "gyroy", width: 15 },
-        { header: "Gyroscope-Z", key: "gyroz", width: 15 },
-        { header: "Latitude", key: "lat", width: 25 },
-        { header: "Longitude", key: "long", width: 10 },
+        { header: "Angle-X", key: "angx", width: 15 },
+        { header: "Angle-Y", key: "angy", width: 15 },
+        { header: "Angle-Z", key: "angz", width: 15 },
+        { header: "Acceleration-X", key: "accelx", width: 15 },
+        { header: "Acceleration-Y", key: "accely", width: 15 },
+        { header: "Acceleration-Z", key: "accelz", width: 15 },
+        { header: "Latitude", key: "lat", width: 15 },
+        { header: "Longitude", key: "long", width: 15 },
+        { header: "Temprature 1", key: "temp1", width: 15 },
+        { header: "Temprature 2", key: "temp1", width: 15 },
+        { header: "Pressure", key: "press", width: 15 },
     ];
     req.body.forEach((data: any) => { worksheet.addRow(data); });
 

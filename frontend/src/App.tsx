@@ -10,14 +10,17 @@ function App() {
     {
       time: 0,
       alt: 0,
-      accx: 0,
-      accy: 0,
-      accz: 0,
-      gyrox: 0,
-      gyroy: 0,
-      gyroz: 0,
+      angx: 0,
+      angy: 0,
+      angz: 0,
+      accelx: 0,
+      accely: 0,
+      accelz: 0,
       lat: 0,
-      long: 0
+      long: 0,
+      temp1: 0,
+      temp2: 0,
+      press: 0
     }
   ])
 
@@ -56,25 +59,28 @@ function App() {
       setCanexport(false)
       setConnected(true);
       const data = event.data;
-      let match = data.match(/alt:(.*), acc-x:(.*), acc-y:(.*), acc-z:(.*), lat:(.*), long:(.*), gyro-x:(.*), gyro-y:(.*), gyro-z:(.*)/);
+      let match = data.match(/(\d{2}:\d{2}:\d{2}\.\d{3}) -> (-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,/);
       if (match) {
         const newData = {
-          time: 0, // Set the appropriate time value
-          alt: parseFloat(match[1]),
-          accx: parseFloat(match[2]),
-          accy: parseFloat(match[3]),
-          accz: parseFloat(match[4]),
-          gyrox: parseFloat(match[7]),
-          gyroy: parseFloat(match[8]),
-          gyroz: parseFloat(match[9]),
-          lat: parseFloat(match[5]),
-          long: parseFloat(match[6]),
+          time: match[1],
+          lat: parseFloat(match[2]),
+          long: parseFloat(match[3]),
+          alt: parseFloat(match[4]),
+          temp1: parseFloat(match[5]),
+          press: parseFloat(match[6]),
+          angx: parseFloat(match[7]),
+          angy: parseFloat(match[8]),
+          angz: parseFloat(match[9]),
+          accelx: parseFloat(match[10]),
+          accely: parseFloat(match[11]),
+          accelz: parseFloat(match[12]),
+          temp2: parseFloat(match[13]),
         };
         setData((prevData) => [...prevData, newData]);
         setPosition({
-          x: mapValueToRange(match[2], -2, 2, -180, 180),
-          y: 0,
-          z: 0,
+          x: mapValueToRange(match[7], 0, 360, -180, 180),
+          y: mapValueToRange(match[8], 0, 360, -180, 180),
+          z: mapValueToRange(match[9], 0, 360, -180, 180),
         });
       };
 
@@ -151,21 +157,24 @@ function App() {
           <select id="ports" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
           <option value="">Select Port</option>
           </select>
-          <button onClick={exportData} disabled={!canexport} className='bg-green-600 text-base p-2 rounded-md mx-2 disabled:cursor-not-allowed disabled:bg-green-200 cursor-pointer'>Export</button>
+          <button onClick={exportData} disabled={!canexport} className='bg-green-600 text-base p-2 rounded-md mx-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-green-300 cursor-pointer'>Export</button>
         </div>
       </div>
-      <div className='flex flex-wrap  w-full bg-slate-900 absolute p-2 lg:p-5 space-x-2 space-y-2 lg:overflow-hidden overflow-scroll'>
+      <div className='flex flex-wrap justify-center w-full bg-slate-900 absolute p-2 lg:p-5 space-x-2 space-y-2 lg:overflow-hidden overflow-scroll'>
         <span></span>
-        <Model rotation={position} />
         <Chart name={"Latitude"} data={data.map((item) => ({ uv: item.long }))} />
         <Chart name={"Longitued"} data={data.map((item) => ({ uv: item.lat }))} />
-        <Chart name={"Accelerometer-X"} data={data.slice(-10).map((item) => ({ uv: item.accx }))} />
-        <Chart name={"Accelerometer-Y"} data={data.slice(-10).map((item) => ({ uv: item.accy }))} />
-        <Chart name={"Accelerometer-Z"} data={data.slice(-10).map((item) => ({ uv: item.accz }))} />
-        <Chart name={"GyroScope-X"} data={data.slice(-10).map((item) => ({ uv: item.gyrox }))} />
-        <Chart name={"GyroScope-Y"} data={data.slice(-10).map((item) => ({ uv: item.gyroy }))} />
-        <Chart name={"GyroScope-Z"} data={data.slice(-10).map((item) => ({ uv: item.gyroz }))} />
-        <Chart name={"Altitude"} data={data.map((item) => ({ uv: item.alt }))} />
+        <Chart name={"Angle-X"} data={data.slice(-10).map((item) => ({ uv: item.angx }))} />
+        <Chart name={"Angle-Y"} data={data.slice(-10).map((item) => ({ uv: item.angy }))} />
+        <Chart name={"Angle-Z"} data={data.slice(-10).map((item) => ({ uv: item.angz }))} />
+        <Chart name={"Acceleration-X"} data={data.slice(-10).map((item) => ({ uv: item.accelx }))} />
+        <Chart name={"Acceleration-Y"} data={data.slice(-10).map((item) => ({ uv: item.accely }))} />
+        <Chart name={"Acceleration-Z"} data={data.slice(-10).map((item) => ({ uv: item.accelz }))} />
+        <Chart name={"Altitude"} data={data.map((item) => ({ uv: item.alt }))} />        
+        <Chart name={"Temprature 1"} data={data.map((item) => ({ uv: item.temp1 }))} />        
+        <Chart name={"Temprature 2"} data={data.map((item) => ({ uv: item.temp2 }))} />        
+        <Chart name={"Pressure"} data={data.map((item) => ({ uv: item.press }))} />        
+        <Model rotation={position} />
       </div>
     </>
   );
