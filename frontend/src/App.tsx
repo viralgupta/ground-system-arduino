@@ -5,7 +5,7 @@ import Model from './3dView';
 function App() {
   const [connected, setConnected] = useState(false);
   const [canexport, setCanexport] = useState(false)
-  const [position, setPosition] = useState({ x: 0, y: 0, z: 0 })
+  const [position, setPosition] = useState({ x: 180, y: 0, z: 0 })
   const [data, setData] = useState([
     {
       time: 0,
@@ -59,28 +59,30 @@ function App() {
       setCanexport(false)
       setConnected(true);
       const data = event.data;
-      let match = data.match(/(\d{2}:\d{2}:\d{2}\.\d{3}) -> (-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,(-?\d+\.\d+) ,/);
-      if (match) {
+      console.log("data", data)
+      let match = data.match(/(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+) ,(-?[\d.]+)/);
+      console.log("match", match)
+      if (match && match[1] && match[2] && match[3] && match[4] && match[5] && match[6] && match[7] && match[8] && match[9] && match[10] && match[11] && match[12]) {
         const newData = {
-          time: match[1],
-          lat: parseFloat(match[2]),
-          long: parseFloat(match[3]),
-          alt: parseFloat(match[4]),
-          temp1: parseFloat(match[5]),
-          press: parseFloat(match[6]),
-          angx: parseFloat(match[7]),
-          angy: parseFloat(match[8]),
-          angz: parseFloat(match[9]),
-          accelx: parseFloat(match[10]),
-          accely: parseFloat(match[11]),
-          accelz: parseFloat(match[12]),
-          temp2: parseFloat(match[13]),
+          time: 0,
+          lat: parseFloat(match[1]),
+          long: parseFloat(match[2]),
+          alt: parseFloat(match[3]),
+          temp1: parseFloat(match[4]),
+          press: parseFloat(match[5]),
+          angx: parseFloat(match[6]),
+          angy: parseFloat(match[7]),
+          angz: parseFloat(match[8]),
+          accelx: parseFloat(match[9]),
+          accely: parseFloat(match[10]),
+          accelz: parseFloat(match[11]),
+          temp2: parseFloat(match[12]),
         };
         setData((prevData) => [...prevData, newData]);
         setPosition({
           x: mapValueToRange(match[7], 0, 360, -180, 180),
-          y: mapValueToRange(match[8], 0, 360, -180, 180),
-          z: mapValueToRange(match[9], 0, 360, -180, 180),
+          y: mapValueToRange(match[9], 0, 360, -180, 180),
+          z: mapValueToRange(match[8], 0, 360, -180, 180),
         });
       };
 
