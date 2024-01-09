@@ -164,8 +164,8 @@ function App() {
       </div>
       <div className='flex flex-wrap justify-center w-full bg-slate-900 absolute p-2 lg:p-5 space-x-2 space-y-2 lg:overflow-hidden overflow-scroll'>
         <span></span>
-        <Chart name={"Latitude"} data={data.map((item) => ({ uv: item.long }))} />
-        <Chart name={"Longitued"} data={data.map((item) => ({ uv: item.lat }))} />
+        <Chart name={"Latitude"} data={data.map((item) => ({ uv: item.lat }))} />
+        <Chart name={"Longitude"} data={data.map((item) => ({ uv: item.long }))} />
         <Chart name={"Angle-X"} data={data.slice(-10).map((item) => ({ uv: item.angx }))} />
         <Chart name={"Angle-Y"} data={data.slice(-10).map((item) => ({ uv: item.angy }))} />
         <Chart name={"Angle-Z"} data={data.slice(-10).map((item) => ({ uv: item.angz }))} />
