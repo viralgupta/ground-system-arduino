@@ -80,7 +80,7 @@ function App() {
         };
         setData((prevData) => [...prevData, newData]);
         setPosition({
-          x: mapValueToRange(match[8]+180, 0, 360, -180, 180),
+          x: mapValueToRange(match[8], 0, 360, -180, 180),
           y: mapValueToRange(match[6], 0, 360, -180, 180),
           z: mapValueToRange(match[7], 0, 360, -180, 180),
         });

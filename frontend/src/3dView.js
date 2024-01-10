@@ -14,7 +14,7 @@ function Model({rotation}) {
 
     return (
         <div className="canvas border w-full h-auto p-2 rounded-md text-white font-bold">
-            3D View
+            3D View 
             <Canvas
                 style={{  height: (window.innerHeight / 3)*2, position: "relative" }}
                 dpr={Math.min(window.devicePixelRatio, 2)}
@@ -37,7 +37,7 @@ function Model({rotation}) {
                 />
                 <primitive
                     object={gltf.scene}
-                    rotation={[(6.26/360)*rotation.y,(6.26/360)*-rotation.x,(6.26/360)*-rotation.z]}
+                    rotation={[(6.26/360)*rotation.y,(6.26/360)*-(rotation.x+180),(6.26/360)*rotation.z]}
                 />
                 <Lights position={[-100, 100, 100]}/>
                 <Lights position={[100, -100, -100]}/>
@@ -45,6 +45,5 @@ function Model({rotation}) {
         </div>
     );
 }
-// useGLTF.preload("/me.glb");
 
 export default Model;

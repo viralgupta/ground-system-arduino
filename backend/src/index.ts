@@ -79,10 +79,12 @@ app.post('/api/savedata', async (req, res) => {
         { header: "Latitude", key: "lat", width: 15 },
         { header: "Longitude", key: "long", width: 15 },
         { header: "Temprature 1", key: "temp1", width: 15 },
-        { header: "Temprature 2", key: "temp1", width: 15 },
+        { header: "Temprature 2", key: "temp2", width: 15 },
         { header: "Pressure", key: "press", width: 15 },
     ];
-    req.body.forEach((data: any) => { worksheet.addRow(data); });
+    req.body.forEach((data:any, index:number) => {
+        worksheet.addRow({ ...data, time: index }); 
+    });
 
     const dispositionObject = contentDisposition.parse("attachment; filename=data.xlsx");
 
