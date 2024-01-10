@@ -5,7 +5,7 @@ import Model from './3dView';
 function App() {
   const [connected, setConnected] = useState(false);
   const [canexport, setCanexport] = useState(false)
-  const [position, setPosition] = useState({ x: 180, y: 0, z: 0 })
+  const [position, setPosition] = useState({ x: 0, y: 0, z: 0 })
   const [data, setData] = useState([
     {
       time: 0,
@@ -80,9 +80,9 @@ function App() {
         };
         setData((prevData) => [...prevData, newData]);
         setPosition({
-          x: mapValueToRange(match[7], 0, 360, -180, 180),
-          y: mapValueToRange(match[9], 0, 360, -180, 180),
-          z: mapValueToRange(match[8], 0, 360, -180, 180),
+          x: mapValueToRange(match[8]+180, 0, 360, -180, 180),
+          y: mapValueToRange(match[6], 0, 360, -180, 180),
+          z: mapValueToRange(match[7], 0, 360, -180, 180),
         });
       };
 
@@ -164,19 +164,19 @@ function App() {
       </div>
       <div className='flex flex-wrap justify-center w-full bg-slate-900 absolute p-2 lg:p-5 space-x-2 space-y-2 lg:overflow-hidden overflow-scroll'>
         <span></span>
-        <Chart name={"Latitude"} data={data.map((item) => ({ uv: item.lat }))} />
-        <Chart name={"Longitude"} data={data.map((item) => ({ uv: item.long }))} />
-        <Chart name={"Angle-X"} data={data.slice(-10).map((item) => ({ uv: item.angx }))} />
-        <Chart name={"Angle-Y"} data={data.slice(-10).map((item) => ({ uv: item.angy }))} />
-        <Chart name={"Angle-Z"} data={data.slice(-10).map((item) => ({ uv: item.angz }))} />
-        <Chart name={"Acceleration-X"} data={data.slice(-10).map((item) => ({ uv: item.accelx }))} />
-        <Chart name={"Acceleration-Y"} data={data.slice(-10).map((item) => ({ uv: item.accely }))} />
-        <Chart name={"Acceleration-Z"} data={data.slice(-10).map((item) => ({ uv: item.accelz }))} />
-        <Chart name={"Altitude"} data={data.map((item) => ({ uv: item.alt }))} />        
-        <Chart name={"Temprature 1"} data={data.map((item) => ({ uv: item.temp1 }))} />        
-        <Chart name={"Temprature 2"} data={data.map((item) => ({ uv: item.temp2 }))} />        
-        <Chart name={"Pressure"} data={data.map((item) => ({ uv: item.press }))} />        
         <Model rotation={position} />
+        <Chart name={"Latitude"} data={data.slice(-20).map((item) => ({ uv: item.lat }))} domainLeft={"auto"} domainRight={"auto"}/>
+        <Chart name={"Longitude"} data={data.slice(-20).map((item) => ({ uv: item.long }))} domainLeft={"auto"} domainRight={"auto"}/>
+        <Chart name={"Altitude"} data={data.slice(-20).map((item) => ({ uv: item.alt }))} domainLeft={"auto"} domainRight={"auto"}/>        
+        <Chart name={"Angle-X"} data={data.slice(-10).map((item) => ({ uv: item.angx }))} domainLeft={-90} domainRight={90}/>
+        <Chart name={"Angle-Y"} data={data.slice(-10).map((item) => ({ uv: item.angy }))} domainLeft={-90} domainRight={90}/>
+        <Chart name={"Angle-Z"} data={data.slice(-10).map((item) => ({ uv: item.angz }))} />
+        <Chart name={"Acceleration-X"} data={data.slice(-10).map((item) => ({ uv: item.accelx }))}  domainLeft={-5} domainRight={5}/>
+        <Chart name={"Acceleration-Y"} data={data.slice(-10).map((item) => ({ uv: item.accely }))}  domainLeft={-5} domainRight={5}/>
+        <Chart name={"Acceleration-Z"} data={data.slice(-10).map((item) => ({ uv: item.accelz }))}  domainLeft={-5} domainRight={5}/>
+        <Chart name={"Temprature 1"} data={data.slice(-20).map((item) => ({ uv: item.temp1 }))} domainLeft={"auto"} domainRight={"auto"}/>        
+        <Chart name={"Temprature 2"} data={data.slice(-20).map((item) => ({ uv: item.temp2 }))} domainLeft={"auto"} domainRight={"auto"}/>        
+        <Chart name={"Pressure"} data={data.slice(-20).map((item) => ({ uv: item.press }))} domainLeft={"auto"} domainRight={"auto"}/>        
       </div>
     </>
   );

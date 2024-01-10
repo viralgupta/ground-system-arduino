@@ -3,10 +3,12 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
 
 type props = {
     name: string;
+    domainLeft?: any;
+    domainRight?: any;
     data: { uv: number;}[]
 }
 
-const Chart = ({ name, data }: props) => {
+const Chart = ({ name, data, domainLeft, domainRight }: props) => {
     const [chartData, setChartData] = useState(data);
 
     useEffect(() => {
@@ -24,10 +26,11 @@ const Chart = ({ name, data }: props) => {
                 </div> */}
             </div>
             <LineChart width={460} height={window.innerHeight / 3} data={chartData} className='mt-2'>
-                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+                <Line type="monotone" dataKey="uv" stroke="#8884d8" isAnimationActive={false}/>
                 {/* <CartesianGrid /> */}
                 <XAxis />
-                <YAxis />
+                {!domainRight && <YAxis/>}
+                {domainRight && <YAxis domain={[domainLeft, domainRight]}/>}
                 <Tooltip contentStyle={{ backgroundColor: 'black', color: "white" }} />
             </LineChart>
         </div>

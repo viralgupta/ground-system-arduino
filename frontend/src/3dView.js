@@ -13,10 +13,10 @@ function Model({rotation}) {
     }
 
     return (
-        <div className="canvas border w-full h-full p-2 rounded-md text-white font-bold">
+        <div className="canvas border w-full h-auto p-2 rounded-md text-white font-bold">
             3D View
             <Canvas
-                style={{ width: window.innerWidth, height: window.innerHeight, position: "relative" }}
+                style={{  height: (window.innerHeight / 3)*2, position: "relative" }}
                 dpr={Math.min(window.devicePixelRatio, 2)}
             >
                 <OrbitControls
