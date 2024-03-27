@@ -1,0 +1,64 @@
+{
+  "applicationId": "neutralinojs.react.ts.vite.template",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "port": 0,
+  "documentRoot": "/react-src/build/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "enableExtensions": true,
+  "exportAuthInfo": true,
+  "tokenSecurity": "one-time",
+  "nativeAllowList": [
+    "window.*",
+    "extensions.*",
+    "app.*",
+    "os.*"
+  ],
+  "logging": {
+    "enabled": false,
+    "writeToLogFile": false
+  },
+  "modes": {
+    "window": {
+      "title": "ground-system-arduino-2",
+      "width": 1005,
+      "height": 800,
+      "minWidth": 1000,
+      "minHeight": 800,
+      "fullScreen": false,
+      "alwaysOnTop": false,
+      "icon": "/react-src/public/tt.png",
+      "enableInspector": false,
+      "borderless": false,
+      "maximize": false,
+      "hidden": false,
+      "resizable": true,
+      "exitProcessOnClose": false,
+      "useSavedState": false,
+      "center": true
+    }
+  },
+  "cli": {
+    "binaryName": "ground-system-arduino-2",
+    "resourcesPath": "/react-src/build/",
+    "extensionsPath": "/extensions/",
+    "binaryVersion": "5.0.0",
+    "clientVersion": "5.0.1",
+    "frontendLibrary": {
+      "patchFile": "/react-src/index.html",
+      "devUrl": "http://localhost:3000",
+      "projectPath": "/react-src/",
+      "initCommand": "npm install",
+      "devCommand": "npm run dev",
+      "buildCommand": "npm run build"
+    }
+  },
+  "extensions": [
+    {
+      "id": "js.thrusttech.ground-system",
+      "command": "node backend/build/index.js"
+    }
+  ]
+}
