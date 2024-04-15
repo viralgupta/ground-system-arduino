@@ -26,7 +26,7 @@ function App() {
   const [canexport, setCanexport] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0, z: 0 });
   const [port, setPort] = useState<null | string>(null);
-  const [writedata, setWritedata] = useState("")
+  const [writedata, setWritedata] = useState("");
   const [data, setData] = useState([
     {
       time: "00:00:00",
@@ -225,8 +225,7 @@ function App() {
     });
     const res = await response.json();
     console.log(res);
-  
-  }
+  };
 
   useEffect(() => {
     const selectElement = document.getElementById("ports") as HTMLSelectElement;
@@ -248,8 +247,12 @@ function App() {
     <>
       <div className="bg-black w-full h-20 text-white text-3xl px-10 font-mono flex items-center justify-between">
         <span className="flex">
-          Thrust&nbsp;Tech&nbsp;India
-          <img src="tt.png" alt="Thrust Tech logo" className="h-10" />
+          <img
+            src="file2.jpeg"
+            alt="Thrust Tech logo"
+            className="h-10 rounded-lg"
+          />
+          &nbsp;Team&nbsp;Astral
         </span>
         <div className="flex">
           {connected && (
@@ -352,8 +355,16 @@ function App() {
                 Write data to {port}
               </DialogHeader>
               <DialogDescription className="flex gap-4">
-                <Input type="text" onChange={(e)=>setWritedata(e.target.value)}/>
-                <Button onClick={postData} disabled={!(writedata.length > 0) || !connected}>POST</Button>
+                <Input
+                  type="text"
+                  onChange={(e) => setWritedata(e.target.value)}
+                />
+                <Button
+                  onClick={postData}
+                  disabled={!(writedata.length > 0) || !connected}
+                >
+                  POST
+                </Button>
               </DialogDescription>
             </DialogContent>
           </Dialog>
@@ -384,13 +395,7 @@ function App() {
           domainLeft={"auto"}
           domainRight={"auto"}
         />
-        <Chart
-          name={"Voltage"}
-          data={data.slice(-20).map((item) => ({ uv: item.voltage }))}
-          domainLeft={"auto"}
-          domainRight={"auto"}
-        />
-        <Chart
+        {/* <Chart
           name={"Latitude"}
           data={data.slice(-20).map((item) => ({ uv: item.latitude }))}
           domainLeft={"auto"}
@@ -401,7 +406,7 @@ function App() {
           data={data.slice(-20).map((item) => ({ uv: item.longitude }))}
           domainLeft={"auto"}
           domainRight={"auto"}
-        />
+        /> */}
         <MultiChart
           name={"Acceleration"}
           data={data.slice(-10).map((item) => ({
@@ -426,9 +431,15 @@ function App() {
           name={"Orientation"}
           data={data
             .slice(-10)
-            .map((item) => ({ x: item.pitch, y: item.roll, z: item.yaw }))}
+            .map((item) => ({ x: item.pitch, y: item.roll, z: item.heading }))}
           domainLeft={-90}
           domainRight={90}
+        />
+        <Chart
+          name={"Voltage"}
+          data={data.slice(-20).map((item) => ({ uv: item.voltage }))}
+          domainLeft={"auto"}
+          domainRight={"auto"}
         />
       </div>
     </>

@@ -80,22 +80,34 @@ app.post('/api/savedata', async (req, res) => {
     const workbook = new excelJS.Workbook();
     const worksheet = workbook.addWorksheet("data");
     worksheet.columns = [
-        { header: "Time", key: "time", width: 25 },
-        { header: "Altitude", key: "alt", width: 15 },
-        { header: "Angle-X", key: "angx", width: 15 },
-        { header: "Angle-Y", key: "angy", width: 15 },
-        { header: "Angle-Z", key: "angz", width: 15 },
-        { header: "Acceleration-X", key: "accelx", width: 15 },
-        { header: "Acceleration-Y", key: "accely", width: 15 },
-        { header: "Acceleration-Z", key: "accelz", width: 15 },
-        { header: "Latitude", key: "lat", width: 15 },
-        { header: "Longitude", key: "long", width: 15 },
-        { header: "Temprature 1", key: "temp1", width: 15 },
-        { header: "Temprature 2", key: "temp2", width: 15 },
-        { header: "Pressure", key: "press", width: 15 },
+        { header: "Time Stamp", key: "time", width: 25 },
+        { header: "Packet Count", key: "packet_count", width: 15 },
+        { header: "Altitude", key: "altitude", width: 15 },
+        { header: "Pressure", key: "pressure", width: 15 },
+        { header: "Temprature 1", key: "temperature1", width: 15 },
+        { header: "Temprature 2", key: "temperature2", width: 15 },
+        { header: "Voltage", key: "voltage", width: 15 },
+        { header: "GPS Time", key: "gnss_time", width: 15 },
+        { header: "Latitude", key: "latitude", width: 15 },
+        { header: "Longitude", key: "longitude", width: 15 },
+        { header: "GPS Altitude", key: "gps_altitude", width: 15 },
+        { header: "Sats", key: "sats", width: 15 },
+        { header: "Acceleration-X", key: "acceleration_x", width: 15 },
+        { header: "Acceleration-Y", key: "acceleration_y", width: 15 },
+        { header: "Acceleration-Z", key: "acceleration_z", width: 15 },
+        { header: "Gyro-X", key: "gyro_x", width: 15 },
+        { header: "Gyro-Y", key: "gyro_y", width: 15 },
+        { header: "Gyro-Z", key: "gyro_z", width: 15 },
+        { header: "Pitch", key: "pitch", width: 15 },
+        { header: "Roll", key: "roll", width: 15 },
+        { header: "Yaw", key: "yaw", width: 15 },
+        { header: "Heading", key: "heading", width: 15 },
+        { header: "Parachute", key: "parachute", width: 15 },
+        { header: "Flight State", key: "flight_state", width: 15 },
+        { header: "Time Since Start", key: "time_since_start", width: 15 },
     ];
-    req.body.forEach((data:any, index:number) => {
-        worksheet.addRow({ ...data, time: index }); 
+    req.body.forEach((data:any) => {
+        worksheet.addRow({ ...data }); 
     });
 
     const dispositionObject = contentDisposition.parse("attachment; filename=data.xlsx");

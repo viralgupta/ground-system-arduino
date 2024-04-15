@@ -3,7 +3,7 @@ import { OrbitControls, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import { useRef } from "react";
 
 function Model({rotation}) {
-    const gltf = useGLTF("/frame.glb");
+    const gltf = useGLTF("/body.glb");
     
     
 
@@ -26,7 +26,7 @@ function Model({rotation}) {
                 />
                 <PerspectiveCamera
                     makeDefault
-                    zoom={1}
+                    zoom={0.4}
                     top={200}
                     bottom={-200}
                     left={200}
@@ -37,7 +37,7 @@ function Model({rotation}) {
                 />
                 <primitive
                     object={gltf.scene}
-                    rotation={[(6.26/360)*rotation.y,(6.26/360)*-(rotation.x+180),(6.26/360)*rotation.z]}
+                    rotation={[(6.26/360)*rotation.x,(6.26/360)*-(rotation.y),(6.26/360)*rotation.z]}
                 />
                 <Lights position={[-100, 100, 100]}/>
                 <Lights position={[100, -100, -100]}/>

@@ -48,6 +48,7 @@ const server = http_1.default.createServer(app);
 app.use(body_parser_1.default.json());
 app.use(express_1.default.static('public'));
 app.use((0, cors_1.default)());
+let serialport;
 app.get('/api/getstream/:path', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
@@ -57,21 +58,21 @@ app.get('/api/getstream/:path', (req, res) => __awaiter(void 0, void 0, void 0, 
         serialport_1.SerialPort.list().then(ports => {
             const matchingPort = ports.find(p => p.path === path);
             if (matchingPort) {
-                const port = new serialport_1.SerialPort({
+                serialport = new serialport_1.SerialPort({
                     baudRate: 9600,
                     path: matchingPort.path
                 });
-                const parser = port.pipe(new parser_readline_1.ReadlineParser({ delimiter: '\r\n' }));
+                const parser = serialport.pipe(new parser_readline_1.ReadlineParser({ delimiter: '\r\n' }));
                 parser.on('data', (data) => {
                     res.write(`data: ${data}\n\n`);
                 });
-                port.on('error', (err) => {
+                serialport.on('error', (err) => {
                     res.end();
                 });
                 req.on('close', () => {
-                    port.close();
+                    serialport.close();
                 });
-                port.on('close', () => {
+                serialport.on('close', () => {
                     res.end();
                 });
             }
@@ -82,6 +83,16 @@ app.get('/api/getstream/:path', (req, res) => __awaiter(void 0, void 0, void 0, 
     };
     connectToDevice();
 }));
+app.post('/api/write', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = req.body.data;
+    if (serialport) {
+        serialport.write(data);
+        res.json({ success: 'Data written to the device' });
+    }
+    else {
+        res.json({ message: 'No device connected' });
+    }
+}));
 app.get('/api/ports', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const ports = yield serialport_1.SerialPort.list();
     const pathlists = ports.map(port => port.path);
@@ -91,22 +102,34 @@ app.post('/api/savedata', (req, res) => __awaiter(void 0, void 0, void 0, functi
     const workbook = new exceljs_1.default.Workbook();
     const worksheet = workbook.addWorksheet("data");
     worksheet.columns = [
-        { header: "Time", key: "time", width: 25 },
-        { header: "Altitude", key: "alt", width: 15 },
-        { header: "Angle-X", key: "angx", width: 15 },
-        { header: "Angle-Y", key: "angy", width: 15 },
-        { header: "Angle-Z", key: "angz", width: 15 },
-        { header: "Acceleration-X", key: "accelx", width: 15 },
-        { header: "Acceleration-Y", key: "accely", width: 15 },
-        { header: "Acceleration-Z", key: "accelz", width: 15 },
-        { header: "Latitude", key: "lat", width: 15 },
-        { header: "Longitude", key: "long", width: 15 },
-        { header: "Temprature 1", key: "temp1", width: 15 },
-        { header: "Temprature 2", key: "temp2", width: 15 },
-        { header: "Pressure", key: "press", width: 15 },
+        { header: "Time Stamp", key: "time", width: 25 },
+        { header: "Packet Count", key: "packet_count", width: 15 },
+        { header: "Altitude", key: "altitude", width: 15 },
+        { header: "Pressure", key: "pressure", width: 15 },
+        { header: "Temprature 1", key: "temperature1", width: 15 },
+        { header: "Temprature 2", key: "temperature2", width: 15 },
+        { header: "Voltage", key: "voltage", width: 15 },
+        { header: "GPS Time", key: "gnss_time", width: 15 },
+        { header: "Latitude", key: "latitude", width: 15 },
+        { header: "Longitude", key: "longitude", width: 15 },
+        { header: "GPS Altitude", key: "gps_altitude", width: 15 },
+        { header: "Sats", key: "sats", width: 15 },
+        { header: "Acceleration-X", key: "acceleration_x", width: 15 },
+        { header: "Acceleration-Y", key: "acceleration_y", width: 15 },
+        { header: "Acceleration-Z", key: "acceleration_z", width: 15 },
+        { header: "Gyro-X", key: "gyro_x", width: 15 },
+        { header: "Gyro-Y", key: "gyro_y", width: 15 },
+        { header: "Gyro-Z", key: "gyro_z", width: 15 },
+        { header: "Pitch", key: "pitch", width: 15 },
+        { header: "Roll", key: "roll", width: 15 },
+        { header: "Yaw", key: "yaw", width: 15 },
+        { header: "Heading", key: "heading", width: 15 },
+        { header: "Parachute", key: "parachute", width: 15 },
+        { header: "Flight State", key: "flight_state", width: 15 },
+        { header: "Time Since Start", key: "time_since_start", width: 15 },
     ];
-    req.body.forEach((data, index) => {
-        worksheet.addRow(Object.assign(Object.assign({}, data), { time: index }));
+    req.body.forEach((data) => {
+        worksheet.addRow(Object.assign({}, data));
     });
     const dispositionObject = contentDisposition.parse("attachment; filename=data.xlsx");
     const dispositionHeader = `attachment; filename="${dispositionObject.parameters.filename}"`;
