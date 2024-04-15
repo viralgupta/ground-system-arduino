@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(cors())
 
+let serialport: SerialPort;
 
 app.get('/api/getstream/:path', async (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -27,25 +28,26 @@ app.get('/api/getstream/:path', async (req: Request, res: Response) => {
             const matchingPort = ports.find(p => p.path === path);
 
             if (matchingPort) {
-                const port = new SerialPort({
+                serialport = new SerialPort({
                     baudRate: 9600,
                     path: matchingPort.path
                 });
-                const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+
+                const parser = serialport.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
                 parser.on('data', (data) => {
                     res.write(`data: ${data}\n\n`);
                 });
 
-                port.on('error', (err) => {
+                serialport.on('error', (err) => {
                     res.end()
                 })
 
                 req.on('close', () => {
-                    port.close();
+                    serialport.close();
                 });
 
-                port.on('close', () => {
+                serialport.on('close', () => {
                     res.end()
                 })
 
@@ -56,6 +58,16 @@ app.get('/api/getstream/:path', async (req: Request, res: Response) => {
     };
 
     connectToDevice();
+});
+
+app.post('/api/write', async (req, res) => {
+    const data = req.body.data;
+    if (serialport) {
+        serialport.write(data);
+        res.json({ success: 'Data written to the device' });
+    } else {
+        res.json({ message: 'No device connected' });
+    }
 });
 
 app.get('/api/ports', async (req, res) => {

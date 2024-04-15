@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogHeader,
   DialogTrigger,
 } from "./components/ui/dialog";
 import {
@@ -17,11 +18,15 @@ import {
   TableHeader,
   TableRow,
 } from "./components/ui/table";
+import { Button } from "./components/ui/button";
+import { Input } from "./components/ui/input";
 
 function App() {
   const [connected, setConnected] = useState(false);
   const [canexport, setCanexport] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0, z: 0 });
+  const [port, setPort] = useState<null | string>(null);
+  const [writedata, setWritedata] = useState("")
   const [data, setData] = useState([
     {
       time: "00:00:00",
@@ -210,6 +215,19 @@ function App() {
     setCanexport(false);
   };
 
+  const postData = async () => {
+    const response = await fetch("http://localhost:5000/api/write", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data: writedata }),
+    });
+    const res = await response.json();
+    console.log(res);
+  
+  }
+
   useEffect(() => {
     const selectElement = document.getElementById("ports") as HTMLSelectElement;
     selectElement.addEventListener("focus", function () {
@@ -219,6 +237,7 @@ function App() {
     selectElement.addEventListener("change", function () {
       if (selectElement.value !== "Select Port") {
         getDataStream(selectElement.value);
+        setPort(selectElement.value);
       }
       selectElement.blur();
     });
@@ -257,7 +276,7 @@ function App() {
           <Dialog>
             <DialogTrigger
               disabled={!connected}
-              className="text-base border rounded-md px-2 bg-blue-400 disabled:opacity-50 disabled:cursor-default"
+              className="text-base border rounded-md px-2 bg-blue-400 disabled:opacity-50 disabled:cursor-default mr-2"
             >
               Raw&nbsp;Data
             </DialogTrigger>
@@ -318,6 +337,23 @@ function App() {
                     ))}
                   </TableBody>
                 </Table>
+              </DialogDescription>
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger
+              disabled={!connected}
+              className="text-base border rounded-md px-2 bg-yellow-400 disabled:opacity-50 disabled:cursor-default"
+            >
+              Write&nbsp;Data
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader className="font-bold">
+                Write data to {port}
+              </DialogHeader>
+              <DialogDescription className="flex gap-4">
+                <Input type="text" onChange={(e)=>setWritedata(e.target.value)}/>
+                <Button onClick={postData} disabled={!(writedata.length > 0) || !connected}>POST</Button>
               </DialogDescription>
             </DialogContent>
           </Dialog>
