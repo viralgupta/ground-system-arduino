@@ -163,8 +163,8 @@ function App() {
         setData((prevData) => [...prevData, newData]);
         setPosition({
           x: mapValueToRange(values[18], 0, 360, -180, 180),
-          y: mapValueToRange(values[19], 0, 360, -180, 180),
-          z: mapValueToRange(values[21], 0, 360, -180, 180),
+          y: mapValueToRange(values[21], 0, 360, -180, 180),
+          z: mapValueToRange(values[19], 0, 360, -180, 180),
         });
       }
 
