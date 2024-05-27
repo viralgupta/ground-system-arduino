@@ -202,11 +202,6 @@ const getStream = async (port: string) => {
               }
             });
 
-            ipcRenderer.on("close-port", () => {
-              serialport.close();
-              return;
-            })
-
             serialport.on('error', (err) => { 
               window.postMessage("serialport-error", "*");
             })
@@ -237,6 +232,14 @@ const getData = () => {
 const getPosition = () => {
   return position;
 }
+
+
+ipcRenderer.on("close-port", () => {
+  if (serialport) {
+    serialport.close();
+    return;
+  }
+})
 
 contextBridge.exposeInMainWorld("backend", {
   getPorts,
