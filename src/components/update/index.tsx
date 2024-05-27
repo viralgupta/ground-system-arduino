@@ -72,20 +72,20 @@ const Update = () => {
     }))
   }, [])
 
-  useEffect(() => {
-    // Get version information and whether to update
-    window.ipcRenderer.on('update-can-available', onUpdateCanAvailable)
-    window.ipcRenderer.on('update-error', onUpdateError)
-    window.ipcRenderer.on('download-progress', onDownloadProgress)
-    window.ipcRenderer.on('update-downloaded', onUpdateDownloaded)
+  // useEffect(() => {
+  //   // Get version information and whether to update
+  //   window.ipcRenderer.on('update-can-available', onUpdateCanAvailable)
+  //   window.ipcRenderer.on('update-error', onUpdateError)
+  //   window.ipcRenderer.on('download-progress', onDownloadProgress)
+  //   window.ipcRenderer.on('update-downloaded', onUpdateDownloaded)
 
-    return () => {
-      window.ipcRenderer.off('update-can-available', onUpdateCanAvailable)
-      window.ipcRenderer.off('update-error', onUpdateError)
-      window.ipcRenderer.off('download-progress', onDownloadProgress)
-      window.ipcRenderer.off('update-downloaded', onUpdateDownloaded)
-    }
-  }, [])
+  //   return () => {
+  //     window.ipcRenderer.off('update-can-available', onUpdateCanAvailable)
+  //     window.ipcRenderer.off('update-error', onUpdateError)
+  //     window.ipcRenderer.off('download-progress', onDownloadProgress)
+  //     window.ipcRenderer.off('update-downloaded', onUpdateDownloaded)
+  //   }
+  // }, [])
 
   return (
     <>

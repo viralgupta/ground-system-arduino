@@ -1,56 +1,8 @@
-import { app, ipcMain, BrowserWindow, shell } from "electron";
+import { app, ipcMain, BrowserWindow, dialog } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import os from "node:os";
-const { autoUpdater } = createRequire(import.meta.url)("electron-updater");
-function update(win2) {
-  autoUpdater.autoDownload = false;
-  autoUpdater.disableWebInstaller = false;
-  autoUpdater.allowDowngrade = false;
-  autoUpdater.on("checking-for-update", function() {
-  });
-  autoUpdater.on("update-available", (arg) => {
-    win2.webContents.send("update-can-available", { update: true, version: app.getVersion(), newVersion: arg == null ? void 0 : arg.version });
-  });
-  autoUpdater.on("update-not-available", (arg) => {
-    win2.webContents.send("update-can-available", { update: false, version: app.getVersion(), newVersion: arg == null ? void 0 : arg.version });
-  });
-  ipcMain.handle("check-update", async () => {
-    if (!app.isPackaged) {
-      const error = new Error("The update feature is only available after the package.");
-      return { message: error.message, error };
-    }
-    try {
-      return await autoUpdater.checkForUpdatesAndNotify();
-    } catch (error) {
-      return { message: "Network error", error };
-    }
-  });
-  ipcMain.handle("start-download", (event) => {
-    startDownload(
-      (error, progressInfo) => {
-        if (error) {
-          event.sender.send("update-error", { message: error.message, error });
-        } else {
-          event.sender.send("download-progress", progressInfo);
-        }
-      },
-      () => {
-        event.sender.send("update-downloaded");
-      }
-    );
-  });
-  ipcMain.handle("quit-and-install", () => {
-    autoUpdater.quitAndInstall(false, true);
-  });
-}
-function startDownload(callback, complete) {
-  autoUpdater.on("download-progress", (info) => callback(null, info));
-  autoUpdater.on("error", (error) => callback(error, null));
-  autoUpdater.on("update-downloaded", complete);
-  autoUpdater.downloadUpdate();
-}
 createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname, "../..");
@@ -69,46 +21,49 @@ if (!app.requestSingleInstanceLock()) {
 let win = null;
 const preload = path.join(__dirname, "../preload/index.mjs");
 const indexHtml = path.join(RENDERER_DIST, "index.html");
+console.log("preload", preload);
 async function createWindow() {
   win = new BrowserWindow({
     title: "Main window",
     icon: path.join(process.env.VITE_PUBLIC, "favicon.ico"),
     webPreferences: {
-      preload
+      preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-      // nodeIntegration: true,
-      // Consider using contextBridge.exposeInMainWorld
-      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
-      // contextIsolation: false,
-    }
+      nodeIntegration: true
+    },
+    minWidth: 1190,
+    minHeight: 700
   });
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {
     win.loadFile(indexHtml);
   }
-  win.webContents.on("did-finish-load", () => {
-    win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
-  });
-  win.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith("https:"))
-      shell.openExternal(url);
-    return { action: "deny" };
-  });
-  update(win);
 }
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  ipcMain.handle("dialog:openSave", async () => {
+    if (!win)
+      return;
+    const currentDate = /* @__PURE__ */ new Date();
+    const options1 = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Kolkata"
+    };
+    const rawFormattedDate = currentDate.toLocaleString("en-IN", options1).replace(/[^\d]/g, "");
+    const formattedDate = rawFormattedDate.substring(0, 2) + "-" + rawFormattedDate.substring(2, 4) + "-" + rawFormattedDate.substring(4, 8) + "_" + rawFormattedDate.substring(8, 10) + "-" + rawFormattedDate.substring(10, 12);
+    const { filePath } = await dialog.showSaveDialog(win, { title: "Save Exported Data", defaultPath: `${formattedDate}`, filters: [{ name: "XLSX File", extensions: ["xlsx"] }] });
+    return filePath == "" ? null : filePath;
+  });
+  createWindow();
+});
 app.on("window-all-closed", () => {
   win = null;
-  if (process.platform !== "darwin")
-    app.quit();
-});
-app.on("second-instance", () => {
-  if (win) {
-    if (win.isMinimized())
-      win.restore();
-    win.focus();
-  }
+  app.quit();
 });
 app.on("activate", () => {
   const allWindows = BrowserWindow.getAllWindows();
@@ -116,20 +71,6 @@ app.on("activate", () => {
     allWindows[0].focus();
   } else {
     createWindow();
-  }
-});
-ipcMain.handle("open-win", (_, arg) => {
-  const childWindow = new BrowserWindow({
-    webPreferences: {
-      preload,
-      nodeIntegration: true,
-      contextIsolation: false
-    }
-  });
-  if (VITE_DEV_SERVER_URL) {
-    childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${arg}`);
-  } else {
-    childWindow.loadFile(indexHtml, { hash: arg });
   }
 });
 export {
