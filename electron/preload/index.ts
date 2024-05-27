@@ -202,6 +202,10 @@ const getStream = async (port: string) => {
               }
             });
 
+            ipcRenderer.on("close-port", () => {
+              serialport.close();
+              return;
+            })
 
             serialport.on('error', (err) => { 
               window.postMessage("serialport-error", "*");

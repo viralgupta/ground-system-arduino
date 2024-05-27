@@ -80,9 +80,12 @@ app.whenReady().then(()=>{
   createWindow();
 });
 
+app.on("before-quit", () => {
+  if (win) win.webContents.send("close-port");
+})
+
 app.on("window-all-closed", () => {
   win = null;
-  // close the port first
   app.quit();
 });
 
