@@ -1,3 +1,5 @@
+const { exec } = require('child_process');
+
 module.exports = {
   packagerConfig: {
     asar: true,
@@ -19,4 +21,23 @@ module.exports = {
       },
     }
   ],
+  // first fix the chunk size problem
+  // hooks: {
+  //   prePackage: async () => {
+  //     return new Promise((resolve, reject) => {
+  //       exec('npm run build', (error, stdout, stderr) => {
+  //         if (error) {
+  //           console.error(`Error executing npm run build: ${error.message}`);
+  //           return reject(error);
+  //         }
+  //         if (stderr) {
+  //           console.error(`stderr: ${stderr}`);
+  //           return reject(new Error(stderr));
+  //         }
+  //         console.log(`stdout: ${stdout}`);
+  //         resolve();
+  //       });
+  //     });
+  //   }
+  // }
 };
