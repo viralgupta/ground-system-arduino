@@ -3,7 +3,7 @@ import { OrbitControls, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import { useRef } from "react";
 
 function Model({rotation}: {rotation: {x: number, y: number, z: number}}) {
-    const gltf = useGLTF("/body.glb");
+    // const gltf = useGLTF("/body.glb");
     
     
 
@@ -15,7 +15,7 @@ function Model({rotation}: {rotation: {x: number, y: number, z: number}}) {
     return (
         <div className="canvas h-auto p-2 rounded-md text-white font-bold font-mono outline w-[95%]">
             3D View 
-            <Canvas
+            {/* <Canvas
                 style={{  height: (window.innerHeight / 3)*2, position: "relative" }}
                 dpr={Math.min(window.devicePixelRatio, 2)}
             >
@@ -37,7 +37,7 @@ function Model({rotation}: {rotation: {x: number, y: number, z: number}}) {
                 />
                 <Lights position={[-100, 100, 100]}/>
                 <Lights position={[100, -100, -100]}/>
-            </Canvas>
+            </Canvas> */}
         </div>
     );
 }

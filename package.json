@@ -1,9 +1,9 @@
 {
-  "name": "electron-vite-react",
+  "name": "ground-system-tt",
   "version": "2.2.0",
   "main": "dist-electron/main/index.js",
   "description": "Electron Vite React boilerplate.",
-  "author": "草鞋没号 <308487730@qq.com>",
+  "author": "Viral Gupta",
   "license": "MIT",
   "private": true,
   "debug": {
@@ -17,7 +17,10 @@
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
     "pree2e": "vite build --mode=test",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
@@ -28,6 +31,7 @@
     "@serialport/parser-readline": "^12.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "electron-squirrel-startup": "^1.0.1",
     "electron-updater": "^6.1.8",
     "exceljs": "^4.4.0",
     "lucide-react": "^0.379.0",
@@ -40,13 +44,20 @@
     "three": "^0.164.1"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron/fuses": "^1.8.0",
     "@playwright/test": "^1.42.1",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.18",
     "electron": "^29.1.1",
-    "electron-builder": "^24.13.3",
     "postcss": "^8.4.35",
     "postcss-import": "^16.0.1",
     "react": "^18.2.0",
