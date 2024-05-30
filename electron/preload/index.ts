@@ -75,7 +75,7 @@ const writePort = async (data: string) => {
 const saveData = async () => {
   const path: string = await ipcRenderer.invoke('dialog:openSave')
   if (!path) {
-    return { message: 'File Saving Canceled!', success: false }
+    return { message: 'File Saving Canceled!', success: false, path: null }
   }
 
   const workbook = new excelJS.Workbook();
@@ -114,9 +114,9 @@ const saveData = async () => {
 
   try {
     await workbook.xlsx.writeFile(path);
-    return { message: 'Data saved successfully', success: true };
+    return { message: 'Data saved successfully', success: true, path: path };
   } catch (error) {
-    return { message: `Error saving data`, success: false };
+    return { message: `Error saving data`, success: false, path: null };
   }
 }
 
@@ -233,6 +233,9 @@ const getPosition = () => {
   return position;
 }
 
+const showSavedFile = (path: string) => {
+  ipcRenderer.send("shell:showInFolder", path);
+}
 
 ipcRenderer.on("close-port", () => {
   if (serialport) {
@@ -248,7 +251,8 @@ contextBridge.exposeInMainWorld("backend", {
   getStream,
   closeStream,
   getData,
-  getPosition
+  getPosition,
+  showSavedFile
 })
 
 // --------- Preload scripts loading ---------

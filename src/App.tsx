@@ -86,7 +86,12 @@ function App() {
 
   const exportData = async () => {
     const response = await window.backend.saveData()
-    response.success ? toast.success(response.message) : toast.error(response.message)
+    response.success ? toast(response.message, {
+      action: {
+        label: 'Show',
+        onClick: () => window.backend.showSavedFile(response.path)
+      },
+    }) : toast.error(response.message)
   };
 
   const postData = async () => {

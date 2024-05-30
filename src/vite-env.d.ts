@@ -42,6 +42,7 @@ interface Window {
     saveData: () => Promise<{
       message: string;
       success: boolean;
+      path: string;
     }>;
     getStream: (port: string) => Promise<void>;
     closeStream: () => void;
@@ -51,5 +52,6 @@ interface Window {
       y: number;
       z: number;
     };
+    showSavedFile: (path: string) => void;
   };
 }
