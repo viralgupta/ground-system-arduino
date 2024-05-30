@@ -72,6 +72,9 @@ app.whenReady().then(()=>{
     const {filePath} = await dialog.showSaveDialog(win, {title: "Save Exported Data", defaultPath: `${formattedDate}`, filters: [{name: "XLSX File", extensions: ["xlsx"]}]})
     return filePath == "" ? null : filePath;
   })
+  ipcMain.handle("is-dev", () => {
+    return VITE_DEV_SERVER_URL ? true : false;
+  })
   createWindow();
 });
 

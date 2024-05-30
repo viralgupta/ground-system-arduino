@@ -331,7 +331,10 @@ function useLoading() {
 // ----------------------------------------------------------------------
 
 const { appendLoading, removeLoading } = useLoading()
-domReady().then(appendLoading)
+ipcRenderer.invoke('is-dev').then((isDev) => {
+  if(!isDev) domReady().then(appendLoading)
+})
+  
 
 window.onmessage = (ev) => {
   ev.data.payload === 'removeLoading' && removeLoading()
