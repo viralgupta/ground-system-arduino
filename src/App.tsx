@@ -27,6 +27,7 @@ function App() {
   const [connected, setConnected] = useState(false);
   const [canexport, setCanexport] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0, z: 0 });
+  const [ports, setPorts] = useState<string[]>([]);
   const [port, setPort] = useState<null | string>(null);
   const [writedata, setWritedata] = useState("");
   const [data, setData] = useState([
@@ -61,17 +62,7 @@ function App() {
 
   const getPorts = async () => {
     const response: { ports: string[] } = await window.backend.getPorts()
-    const selectElement = document.getElementById("ports") as HTMLSelectElement;
-    const doption = document.createElement("option");
-    doption.defaultSelected = true;
-    doption.text = "Select Port";
-    selectElement.add(doption);
-    response.ports.forEach((port) => {
-      const option = document.createElement("option");
-      option.value = port;
-      option.text = port;
-      selectElement.add(option);
-    });
+    setPorts(response.ports);
   };
 
 
@@ -101,8 +92,13 @@ function App() {
 
   useEffect(() => {
     const selectElement = document.getElementById("ports") as HTMLSelectElement;
+    selectElement.addEventListener("mouseenter", function () {
+      getPorts();
+    });
     selectElement.addEventListener("focus", function () {
-      selectElement.innerHTML = "";
+      getPorts();
+    });
+    selectElement.addEventListener("blur", function () {
       getPorts();
     });
     selectElement.addEventListener("change", function () {
@@ -160,6 +156,11 @@ function App() {
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value="">Select Port</option>
+            {ports.map((port) => (
+              <option key={port} value={port}>
+                {port}
+              </option>
+            ))}
           </select>
           <button
             onClick={exportData}
