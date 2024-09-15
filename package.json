@@ -20,7 +20,7 @@
     "e2e": "playwright test",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "tsc && vite build && electron-forge make"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
