@@ -1,3 +1,6 @@
-This Project is Used to Recieve/Visualize Live data from arduino satelite. You can even export the data to Excel.
+This Project is Used to Recieve/Visualize Live data from Cube Sat. You can even export the data to Excel.
 
-![Screenshot 2023-12-19 155321](https://github.com/viralgupta/ground-system-arduino/assets/119971154/ce1a2ed2-73ad-49cc-928a-a2b425e8aaf9)
+![image](https://github.com/user-attachments/assets/01089107-fa9a-47c8-a593-450b7fb21a55)
+
+
+https://github.com/user-attachments/assets/06ad1c2a-9d7a-48d9-abca-bd5a3ddd073f
