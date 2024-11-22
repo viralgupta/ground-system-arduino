@@ -263,31 +263,48 @@ function App() {
           </Dialog>
         </div>
       </div>
-      <div className="flex flex-wrap justify-center bg-slate-900 absolute p-2 lg:p-5 space-x-2 space-y-2 lg:overflow-hidden overflow-scroll">
-        <span></span>
-        <Model rotation={position} />
-        <MultiChart
-          name={"Altitude"}
-          data={data
-            .slice(-20)
-            .map((item) => ({ nomal: item.altitude, gps: item.gps_altitude }))}
-          domainLeft={"auto"}
-          domainRight={"auto"}
-        />
-        <Chart
-          name={"Pressure"}
-          data={data.slice(-20).map((item) => ({ uv: item.pressure }))}
-          domainLeft={"auto"}
-          domainRight={"auto"}
-        />
-        <MultiChart
-          name={"Temperature"}
-          data={data
-            .slice(-20)
-            .map((item) => ({ 1: item.temperature1, 2: item.temperature2 }))}
-          domainLeft={"auto"}
-          domainRight={"auto"}
-        />
+      <div className="flex flex-wrap justify-center bg-slate-900 absolute p-2 lg:p-5 gap-2 lg:overflow-hidden overflow-scroll">
+        <div className="w-full flex gap-2 ml-5">
+          <Model rotation={position} />
+          <div className="flex flex-col">
+            <div className="w-full flex gap-2">
+              <MultiChart
+                name={"Altitude"}
+                data={data
+                  .slice(-20)
+                  .map((item) => ({ nomal: item.altitude, gps: item.gps_altitude }))}
+                  domainLeft={"auto"}
+                  domainRight={"auto"}
+                  />
+              <Chart
+                name={"Pressure"}
+                data={data.slice(-20).map((item) => ({ uv: item.pressure }))}
+                domainLeft={"auto"}
+                domainRight={"auto"}
+                />
+            </div>
+            <div className="w-full flex gap-2">
+              <MultiChart
+                name={"Temperature"}
+                data={data
+                  .slice(-20)
+                  .map((item) => ({ 1: item.temperature1, 2: item.temperature2 }))}
+                  domainLeft={"auto"}
+                  domainRight={"auto"}
+                  />
+              <MultiChart
+                name={"Acceleration"}
+                data={data.slice(-10).map((item) => ({
+                  x: item.acceleration_x,
+                  y: item.acceleration_y,
+                  z: item.acceleration_z,
+                }))}
+                domainLeft={-5}
+                domainRight={5}
+                />
+          </div>
+        </div>
+        </div>
         {/* <Chart
           name={"Latitude"}
           data={data.slice(-20).map((item) => ({ uv: item.latitude }))}
@@ -300,16 +317,6 @@ function App() {
           domainLeft={"auto"}
           domainRight={"auto"}
         /> */}
-        <MultiChart
-          name={"Acceleration"}
-          data={data.slice(-10).map((item) => ({
-            x: item.acceleration_x,
-            y: item.acceleration_y,
-            z: item.acceleration_z,
-          }))}
-          domainLeft={-5}
-          domainRight={5}
-        />
         <MultiChart
           name={"Gyroscope"}
           data={data.slice(-10).map((item) => ({

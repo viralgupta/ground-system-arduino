@@ -11,7 +11,7 @@ type props = {
 const MultiChart = ({ name, data, domainLeft, domainRight, colors = ['#4b9ac4', '#82ca9d', '#ca8882'] }: props) => {
   
   return (
-    <div className="w-min outline outline-white p-2 rounded-md ">
+    <div className="w-min outline outline-white p-2 rounded-md h-[300px]">
       <div className="flex justify-between">
         <span className="text-white font-bold font-mono">{name}</span>
       </div>

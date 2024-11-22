@@ -11,7 +11,7 @@ function Model({rotation}: {rotation: {x: number, y: number, z: number}}) {
     }
 
     return (
-        <div className="canvas h-auto p-2 rounded-md text-white font-bold font-mono outline w-[95%]">
+        <div className="canvas p-2 rounded-md text-white font-bold font-mono outline w-[32%] h-[600px]">
             3D View 
             <Canvas
                 style={{  height: (window.innerHeight / 3)*2, position: "relative" }}

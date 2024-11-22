@@ -10,7 +10,7 @@ type props = {
 const Chart = ({ name, data, domainLeft, domainRight }: props) => {
 
     return (
-        <div className='w-min outline outline-white p-2 rounded-md'>
+        <div className='w-min outline outline-white p-2 rounded-md h-[300px]'>
             <div className='flex justify-between'>
                 <span className='text-white font-bold font-mono'>{name}</span>
             </div>
